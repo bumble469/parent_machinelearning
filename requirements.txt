@@ -10,3 +10,5 @@ uvicorn
 apscheduler
 quart
 quart_cors
+python-dotenv
+
