@@ -1,0 +1,10 @@
+flask
+flask-cors
+pyodbc
+sqlalchemy
+pandas
+numpy
+scikit-learn
+requests 
+uvicorn
+apscheduler
