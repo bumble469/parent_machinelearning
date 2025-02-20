@@ -9,3 +9,4 @@ requests
 uvicorn
 apscheduler
 quart
+quart_cors
