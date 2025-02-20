@@ -77,7 +77,3 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(run_scheduled_task, "interval", weeks=5)  
 scheduler.start()
 
-
-if __name__ == '__main__':
-    from uvicorn import run
-    run(app, host="0.0.0.0", port=5000)
