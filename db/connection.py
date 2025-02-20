@@ -8,11 +8,11 @@ load_dotenv()
 def get_db_connection():
     try:
         conn = pyodbc.connect(
-            f"DRIVER={os.getenv('DB_DRIVER')}"
-            f"SERVER={os.getenv('DB_SERVER')}"
-            f"DATABASE={os.getenv('DB_DATABASE')}"
+            f"DRIVER={os.getenv('DB_DRIVER')};"
+            f"SERVER={os.getenv('DB_SERVER')};"
+            f"DATABASE={os.getenv('DB_DATABASE')};"
             f"UID={os.getenv('DB_USER')};"
-            f"PWD={os.getenv('DB_PASSWORD')}"
+            f"PWD={os.getenv('DB_PASSWORD')};"
             f"TrustServerCertificate=yes;"
         )
         print('Connected to the database!')
