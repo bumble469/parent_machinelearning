@@ -8,3 +8,4 @@ scikit-learn
 requests 
 uvicorn
 apscheduler
+quart
