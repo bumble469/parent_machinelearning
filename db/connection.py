@@ -1,29 +1,24 @@
-import pyodbc
+import pymssql
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import os
-
-# Load environment variables
 load_dotenv()
 
-# ✅ Ensure the driver has proper spacing
-DB_DRIVER = os.getenv("DB_DRIVER", "ODBC Driver 17 for SQL Server").replace(" ", "+")
 DB_SERVER = os.getenv("DB_SERVER")
 DB_DATABASE = os.getenv("DB_DATABASE")
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_PORT = os.getenv("DB_PORT", "1433")  # Default to 1433 if not set
+DB_PORT = os.getenv("DB_PORT", "1433")
 
 def get_db_connection():
-    """Creates a direct connection using pyodbc."""
+    """Creates a direct connection using pymssql."""
     try:
-        conn = pyodbc.connect(
-            f"DRIVER={{{DB_DRIVER}}};"
-            f"SERVER={DB_SERVER},{DB_PORT};"
-            f"DATABASE={DB_DATABASE};"
-            f"UID={DB_USER};"
-            f"PWD={DB_PASSWORD};"
-            f"TrustServerCertificate=yes;"
+        conn = pymssql.connect(
+            server=DB_SERVER,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_DATABASE,
+            port=int(DB_PORT)
         )
         print("✅ Connected to the database!")
 
@@ -38,14 +33,11 @@ def get_db_connection():
         print(f"❌ Error connecting to the database: {e}")
         raise
 
-
 def get_db_engine():
-    """Creates an SQLAlchemy engine for ORM-based queries."""
+    """Creates an SQLAlchemy engine using pymssql."""
     try:
         engine = create_engine(
-            f"mssql+pyodbc://{DB_USER}:{DB_PASSWORD}@{DB_SERVER}:{DB_PORT}/{DB_DATABASE}"
-            f"?driver={DB_DRIVER}&TrustServerCertificate=yes",
-            fast_executemany=True
+            f"mssql+pymssql://{DB_USER}:{DB_PASSWORD}@{DB_SERVER}:{DB_PORT}/{DB_DATABASE}"
         )
         print("✅ SQLAlchemy Engine created successfully!")
         return engine

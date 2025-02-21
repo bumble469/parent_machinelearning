@@ -10,6 +10,7 @@ from services.attendance_predictions import predict_attendance
 from db.attendance_data_fetch import process_all_students
 from db.attendance_timetable_fetch import fetch_latest_timetable
 from scripts.retrain_attendance_model import train_and_save_model
+import uvicorn
 
 app = Quart(__name__)
 app = cors(app, allow_origin="*")  # Allow all origins in production (adjust if needed)
@@ -20,7 +21,7 @@ DATA_FILE = os.path.join("data", "attendance", "processed", "processed_attendanc
 if os.path.exists(DATA_FILE):
     data = pd.read_csv(DATA_FILE, na_values=['NaN', '?', ''])
 else:
-    data = pd.DataFrame()  # Empty DataFrame to prevent crashes
+    data = pd.DataFrame()  
 
 @app.route('/predict-marks', methods=['POST'])
 async def predict_marks_api():
@@ -81,3 +82,6 @@ def run_scheduled_task():
 scheduler = BackgroundScheduler()
 scheduler.add_job(run_scheduled_task, "interval", weeks=5)  
 scheduler.start()
+
+# if __name__ == '__main__':
+#     uvicorn.run("app:app", host="0.0.0.0", port=5000, reload=True)
