@@ -41,7 +41,7 @@ async def fetch_student_data(prn):
             sem_6_marks_total,
             sem_6_obtainable_total
         FROM psat_final.dbo.student_academic_summary
-        WHERE prn = ?
+        WHERE prn = %s
     """
 
     df = await asyncio.to_thread(pd.read_sql, query, engine, params=(prn,))

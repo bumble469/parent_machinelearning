@@ -18,7 +18,7 @@ async def fetch_subject_teacher_mapping(prn):
             festival,
             date
         FROM psat_final.dbo.vw_student_attendance_details
-        WHERE prn = ? AND teacher_name IS NOT NULL
+        WHERE prn = %s AND teacher_name IS NOT NULL
     """
     
     df = pd.read_sql(query, engine, params=(prn,))
@@ -72,7 +72,7 @@ async def getFinalAttendance(prn):
             festival,
             CAST(date AS DATE) AS date  -- Converts datetime to date
         FROM psat_final.dbo.vw_student_attendance_details
-        WHERE prn = ?
+        WHERE prn = %s
     """
     
     df = pd.read_sql(query, engine, params=(prn,))
