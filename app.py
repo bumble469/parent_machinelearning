@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 import asyncio
+from db.utils.flask_security import wake_up_flask_api
 from services.marks_predictions import predict_marks
 from db.marks_data_fetch import fetch_student_data
 from services.attendance_predictions import predict_attendance
@@ -13,11 +14,10 @@ from scripts.retrain_attendance_model import train_and_save_model
 import uvicorn
 
 app = Quart(__name__)
-app = cors(app, allow_origin="*")  # Allow all origins in production (adjust if needed)
+app = cors(app, allow_origin=["http://localhost:3000"])
 
 DATA_FILE = os.path.join("data", "attendance", "processed", "processed_attendance_dataset.csv")
 
-# Load data
 if os.path.exists(DATA_FILE):
     data = pd.read_csv(DATA_FILE, na_values=['NaN', '?', ''])
 else:
@@ -26,6 +26,7 @@ else:
 @app.route('/predict-marks', methods=['POST'])
 async def predict_marks_api():
     try:
+        await wake_up_flask_api()
         input_data = await request.get_json()
         prn = input_data.get("prn")
 
@@ -49,6 +50,7 @@ async def predict_marks_api():
 @app.route('/predict-attendance', methods=['POST'])
 async def predict_attendance_api():
     try:
+        await wake_up_flask_api()
         input_data = await request.get_json()
         prn = input_data.get("prn")
         
@@ -83,5 +85,5 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(run_scheduled_task, "interval", weeks=5)  
 scheduler.start()
 
-if __name__ == '__main__':
-    uvicorn.run("app:app", host="0.0.0.0", port=5000, reload=True)
+# if __name__ == '__main__':
+#     uvicorn.run("app:app", host="0.0.0.0", port=5000, reload=True)
