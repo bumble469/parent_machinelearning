@@ -13,7 +13,9 @@ from scripts.retrain_attendance_model import train_and_save_model
 # import uvicorn
 
 app = Quart(__name__)
-app = cors(app, allow_origin=["http://localhost:3000"])
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
+allowed_origins = [origin.strip() for origin in allowed_origins if origin.strip()]
+app = cors(app, allow_origin=allowed_origins)
 
 DATA_FILE = os.path.join("data", "attendance", "processed", "processed_attendance_dataset.csv")
 
