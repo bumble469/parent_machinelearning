@@ -7,11 +7,11 @@ load_dotenv()
 FLASK_API_URL = os.getenv("REACT_APP_FLASK_API_URL")
 
 async def wake_up_flask_api():
-    max_retries = 6  
+    max_retries = 3  
     for attempt in range(max_retries):
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(FLASK_API_URL, timeout=25) as response:
+                async with session.get(FLASK_API_URL, timeout=15) as response:
                     if response.status == 200:
                         return True  
         except Exception:
