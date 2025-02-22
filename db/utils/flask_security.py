@@ -1,6 +1,8 @@
 import aiohttp
-
-FLASK_API_URL = "https://parent-encryption.onrender.com"
+import os
+from dotenv import load_dotenv
+load_dotenv()
+FLASK_API_URL = os.getenv("REACT_APP_FLASK_API_URL")
 
 async def call_flask_encrypt_api(endpoint, data):
     try:
