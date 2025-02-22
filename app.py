@@ -4,14 +4,13 @@ import os
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 import asyncio
-from db.utils.flask_security import wake_up_flask_api
 from services.marks_predictions import predict_marks
 from db.marks_data_fetch import fetch_student_data
 from services.attendance_predictions import predict_attendance
 from db.attendance_data_fetch import process_all_students
 from db.attendance_timetable_fetch import fetch_latest_timetable
 from scripts.retrain_attendance_model import train_and_save_model
-import uvicorn
+# import uvicorn
 
 app = Quart(__name__)
 app = cors(app, allow_origin=["http://localhost:3000"])
@@ -26,7 +25,6 @@ else:
 @app.route('/predict-marks', methods=['POST'])
 async def predict_marks_api():
     try:
-        await wake_up_flask_api()
         input_data = await request.get_json()
         prn = input_data.get("prn")
 
@@ -50,7 +48,6 @@ async def predict_marks_api():
 @app.route('/predict-attendance', methods=['POST'])
 async def predict_attendance_api():
     try:
-        await wake_up_flask_api()
         input_data = await request.get_json()
         prn = input_data.get("prn")
         
