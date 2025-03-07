@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import pandas as pd
 import os
-
+import json
 MODEL_FOLDER = os.path.join('models/marks')
 
 with open(os.path.join(MODEL_FOLDER, 'linear_model.pkl'), 'rb') as f:
@@ -82,17 +82,31 @@ def predict_marks(input_data):
                 "current_attendance_perc": attendance_perc,
                 "predicted_perc": round(predicted_perc, 2),
                 "predicted_grade_range": predicted_grade_range,
-                "prevsem1_perc": prev_sem1["perc"],
-                "prevsem1_marks": prev_sem1["marks"],
-                "prevsem1_total_obtainable": prev_sem1["total_obtainable"],
-                "prevsem1_grade": prev_sem1["grade"],  # Added previous semester 1 grade
-                "prevsem2_perc": prev_sem2["perc"],
-                "prevsem2_marks": prev_sem2["marks"],
-                "prevsem2_total_obtainable": prev_sem2["total_obtainable"],
-                "prevsem2_grade": prev_sem2["grade"]   # Added previous semester 2 grade
+                # "prevsem1_perc": prev_sem1["perc"],
+                # "prevsem1_marks": prev_sem1["marks"],
+                # "prevsem1_total_obtainable": prev_sem1["total_obtainable"],
+                # "prevsem1_grade": prev_sem1["grade"],  # Added previous semester 1 grade
+                # "prevsem2_perc": prev_sem2["perc"],
+                # "prevsem2_marks": prev_sem2["marks"],
+                # "prevsem2_total_obtainable": prev_sem2["total_obtainable"],
+                # "prevsem2_grade": prev_sem2["grade"]   # Added previous semester 2 grade
             }
 
         else:
             return {"error": f"No trained model or scaler found for Semester {latest_sem}."}
     except Exception as e:
         return {"error": str(e)}
+
+input_data = {
+    "current_sem": 3,
+    "sem_1_marks_percentage": 65.0,
+    "sem_1_marks_total": 650,
+    "sem_1_obtainable_total": 1000,
+    "sem_2_marks_percentage": 70.0,
+    "sem_2_marks_total": 700,
+    "sem_2_obtainable_total": 1000,
+    "sem_3_attendance_perc": 85.0,
+    "sem_3_obtainable_total": 1000
+}
+result = predict_marks(input_data)
+print(json.dumps(result, indent=4))

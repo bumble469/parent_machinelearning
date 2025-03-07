@@ -24,6 +24,10 @@ if os.path.exists(DATA_FILE):
 else:
     data = pd.DataFrame()  
 
+@app.route('/wakeup', methods=['GET'])
+def wakeup():
+    return jsonify({"status": "ok"})
+
 @app.route('/predict-marks', methods=['POST'])
 async def predict_marks_api():
     try:
